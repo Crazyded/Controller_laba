@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         if (LayerMaskUtil.LayerMaskContainsLayer (groundLayerMask, collision.gameObject.layer))
         {
-            Debug.Log("isGrounded");
+            isGrounded = true;
         }
     }
 }
