@@ -8,13 +8,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float jumpForce;
 
+    [Space]
+    [SerializeField] private LayerMask groundLayerMask;
+
     private Rigidbody2D rb;
+    private bool isGrounded;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -37,4 +40,11 @@ public class PlayerController : MonoBehaviour
     private void Jump() =>
         rb.AddForce(new Vector2(0, jumpForce),
             ForceMode2D.Impulse);
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (LayerMaskUtil.LayerMaskContainsLayer (groundLayerMask, collision.gameObject.layer))
+        {
+            Debug.Log("isGrounded");
+        }
+    }
 }
