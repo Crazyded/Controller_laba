@@ -22,10 +22,19 @@ public class PlayerController : MonoBehaviour
         {
             Move(horizontalInput * movementSpeed);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
     }
 
     private void Move(float moveSpeed)
     {
-        rb.AddForce(new Vector2(movementSpeed, 0));
+        rb.AddForce(new Vector2(moveSpeed, 0));
     }
+
+    private void Jump() =>
+        rb.AddForce(new Vector2(0, jumpForce),
+            ForceMode2D.Impulse);
 }
