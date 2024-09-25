@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
 
     [Space]
     [SerializeField] private LayerMask groundLayerMask;
-
+    [field:SerializeField] public Color accentColor { get; private set; }
+    [SerializeField] private Color defaultColor;
     private Rigidbody2D rb;
     private bool isGrounded;
     void Start()
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
             Move(horizontalInput * movementSpeed);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
@@ -42,9 +43,36 @@ public class PlayerController : MonoBehaviour
             ForceMode2D.Impulse);
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (LayerMaskUtil.LayerMaskContainsLayer (groundLayerMask, collision.gameObject.layer))
+        SetGrounded(collision, true);
+        ColorTile(collision.gameObject.GetComponent<SpriteRenderer>());
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        SetGrounded(collision, false);
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        SetGrounded(collision, true);
+    }
+    private void SetGrounded(Collision2D collision, bool isGrounded)
+    {
+        if (LayerMaskUtil.LayerMaskContainsLayer(groundLayerMask,
+            collision.gameObject.layer))
         {
-            isGrounded = true;
+            this.isGrounded = isGrounded;
+            
+        }
+    }
+
+    private void ColorTile(SpriteRenderer spriteRenderer)
+    {
+        if (spriteRenderer.color == defaultColor)
+        {
+            spriteRenderer.color = accentColor;
+        }
+        else
+        {
+            spriteRenderer.color = defaultColor;
         }
     }
 }
